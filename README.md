@@ -92,6 +92,12 @@ A rhythm-tapping race to the finish line.
 
 ---
 
+## 🍻 Créditos
+
+Creado por el **Capitán del Scabio**, ¡salud y libertad! 🍻⚡
+
+---
+
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

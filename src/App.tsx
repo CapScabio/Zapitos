@@ -175,7 +175,7 @@ function App() {
       {/* Footer */}
       <footer style={{ borderTop: 'var(--border-pixel)', padding: '16px', background: 'var(--bg-swamp)', textAlign: 'center' }}>
         <p className="retro-text" style={{ fontSize: '0.45rem', color: 'var(--text-muted)' }}>
-          🎮 HACKATÓN #04 (GAMING) LA CRYPTA · HECHO CON 💚 Y SOFTWARE LIBRE EN 2026 🐸
+          🎮 HACKATÓN #04 (GAMING) LA CRYPTA · Creado por el Capitán del Scabio, ¡salud y libertad! 🍻⚡
         </p>
       </footer>
 
