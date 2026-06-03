@@ -18,6 +18,7 @@ const io = new Server(httpServer, {
 // Mock Database for Invoices
 const mockInvoices = new Map();
 const mockBalances = new Map(); // npub -> balance (sats)
+const lastBalanceUpdate = new Map(); // npub -> timestamp for rate limiting
 
 // Helper: Genera un hash aleatorio para simular facturas LN
 const generateRandomHash = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -92,13 +93,27 @@ app.get('/api/balance/:npub', (req, res) => {
   res.json({ balance });
 });
 
-// Actualizar saldo directamente (para el demo del juego)
+// Actualizar saldo directamente (para el demo del juego con validaciones)
 app.post('/api/balance/update', (req, res) => {
   const { npub, amount } = req.body;
   if (!npub) return res.status(400).json({ error: 'Falta npub' });
   
+  // Medida de seguridad: Validar límites en el demo (max +1000 / -1000 sats por transacción)
+  const numericAmount = parseInt(amount);
+  if (isNaN(numericAmount) || Math.abs(numericAmount) > 1000) {
+    return res.status(400).json({ error: 'Monto de transacción inválido o excede el límite (max 1000 sats)' });
+  }
+
+  // Medida de seguridad: Rate limiting (cooldown de 2.5s entre actualizaciones por npub)
+  const now = Date.now();
+  const lastUpdate = lastBalanceUpdate.get(npub) || 0;
+  if (now - lastUpdate < 2500 && numericAmount > 0) {
+    return res.status(429).json({ error: 'Actualizaciones de saldo demasiado rápidas (cooldown activo)' });
+  }
+
+  lastBalanceUpdate.set(npub, now);
   const currentBalance = mockBalances.get(npub) || 0;
-  const newBalance = Math.max(0, currentBalance + parseInt(amount));
+  const newBalance = Math.max(0, currentBalance + numericAmount);
   mockBalances.set(npub, newBalance);
   
   res.json({ balance: newBalance });
@@ -107,20 +122,20 @@ app.post('/api/balance/update', (req, res) => {
 // Pagar un retiro (LNURL-Withdraw / Send Payment)
 app.post('/api/withdraw', (req, res) => {
   const { invoice, amount, npub } = req.body;
-  if (!invoice || !amount || amount <= 0) {
-    return res.status(400).json({ error: 'Datos de retiro inválidos' });
+  
+  // Medida de seguridad: npub es obligatorio para evitar retiros de saldo inexistente
+  if (!invoice || !amount || amount <= 0 || !npub) {
+    return res.status(400).json({ error: 'Datos de retiro inválidos o falta npub' });
   }
 
   // Verificar si tiene saldo suficiente
-  if (npub) {
-    const balance = mockBalances.get(npub) || 0;
-    if (balance < amount) {
-      return res.status(400).json({ error: 'Saldo insuficiente' });
-    }
-    mockBalances.set(npub, balance - amount);
+  const balance = mockBalances.get(npub) || 0;
+  if (balance < amount) {
+    return res.status(400).json({ error: 'Saldo insuficiente' });
   }
+  mockBalances.set(npub, balance - amount);
 
-  console.log(`[MOCK LN] Retiro exitoso procesado para ${npub || 'Anónimo'}: ${amount} sats enviados a ${invoice}`);
+  console.log(`[MOCK LN] Retiro exitoso procesado para ${npub}: ${amount} sats enviados a ${invoice}`);
   res.json({ status: 'ok', preimage: generateRandomHash() });
 });
 
@@ -280,6 +295,13 @@ io.on('connection', (socket) => {
         room.players.splice(pIndex, 1);
         
         console.log(`[SOCKET] Jugador ${removedPlayer.name} abandonó la sala ${roomId}`);
+
+        // Medida de seguridad/UX: Reembolsar entrada si el juego no había comenzado aún
+        if (!room.started) {
+          const currentBalance = mockBalances.get(removedPlayer.npub) || 0;
+          mockBalances.set(removedPlayer.npub, currentBalance + room.entryFee);
+          console.log(`[SERVER] Reembolso automático: ${room.entryFee} sats devueltos a ${removedPlayer.name}`);
+        }
 
         if (room.players.length === 0) {
           gameRooms.delete(roomId);
