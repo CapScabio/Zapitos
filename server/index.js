@@ -229,7 +229,17 @@ io.on('connection', (socket) => {
     if (!room || !room.started) return;
 
     const player = room.players.find(p => p.socketId === socket.id);
+    if (!player) return;
+
+    // Mitigación de trampas: Cooldown de saltos de 800ms
+    const now = Date.now();
+    if (now - (player.lastJumpTime || 0) < 800) {
+      console.warn(`[SECURITY] Jugador ${player.name} intentó saltar demasiado rápido (spam detectado)`);
+      return;
+    }
+
     if (player && !room.state.finished) {
+      player.lastJumpTime = now;
       player.x += 10; // Avanzar 10% en la pista de carrera
 
       io.to(roomId).emit('race_progress', room.players);
