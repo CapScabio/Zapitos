@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;700&display=swap');
+
+:root {
+  /* 8-Bit Bitcoiner Swamp Palette */
+  --bg-dark: #070c10;
+  --bg-swamp: #0e1a14;
+  --bg-card: #14241d;
+  --bg-card-hover: #1e362c;
+  
+  --primary-neon: #39ff14;    /* Verde sapito neón */
+  --primary-dark: #22a00c;    /* Verde sapito oscuro */
+  --accent-orange: #f7931a;   /* Naranja Bitcoin */
+  --accent-orange-dark: #b56708;
+  --accent-teal: #00f5ff;     /* Cian Nostr/Consola */
+  --accent-teal-dark: #00a4ab;
+  --text-light: #ffffff;
+  --text-muted: #8b9f95;
+  --text-error: #ff4747;
+  
+  /* Fonts */
+  --font-game: 'Press Start 2P', monospace;
+  --font-ui: 'Outfit', system-ui, sans-serif;
+  
+  /* Retro Pixel Borders */
+  --border-pixel: 4px solid #14241d;
+  --border-pixel-active: 4px solid #39ff14;
+  --border-pixel-orange: 4px solid #f7931a;
+  
+  /* Shadows */
+  --pixel-shadow: 4px 4px 0px #000;
+  --glow-green: 0 0 10px rgba(57, 255, 20, 0.4);
+  --glow-orange: 0 0 10px rgba(247, 147, 26, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  image-rendering: pixelated; /* Optimizado para sprites retro */
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    linear-gradient(rgba(18, 30, 24, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 30, 24, 0.5) 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: var(--text-light);
+  font-family: var(--font-ui);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar Retro style */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+  border-left: 4px solid var(--bg-card);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border: 2px solid var(--bg-dark);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-neon);
+}
+
+/* Typography styles */
+.retro-title {
+  font-family: var(--font-game);
+  font-size: 2rem;
+  color: var(--primary-neon);
+  text-shadow: 4px 4px 0px #000, 0 0 15px rgba(57, 255, 20, 0.6);
+  text-align: center;
+  line-height: 1.5;
+  letter-spacing: -2px;
+}
+
+.retro-subtitle {
+  font-family: var(--font-game);
+  font-size: 0.8rem;
+  color: var(--accent-orange);
+  text-shadow: 2px 2px 0px #000;
+  text-align: center;
+}
+
+.retro-text {
+  font-family: var(--font-game);
+  font-size: 0.65rem;
+  line-height: 1.6;
+}
+
+/* CRT monitor scanline and flicker effect */
+.crt-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-container::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 9999;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+}
+
+.crt-container::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: rgba(18, 16, 16, 0.1);
+  opacity: 0;
+  z-index: 99999;
+  pointer-events: none;
+  animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+  0% { opacity: 0.18; }
+  50% { opacity: 0.22; }
+  100% { opacity: 0.18; }
+}
+
+/* Retro UI Elements */
+.pixel-card {
+  background-color: var(--bg-card);
+  border: var(--border-pixel);
+  box-shadow: var(--pixel-shadow);
+  padding: 16px;
+  position: relative;
+  transition: transform 0.1s, border-color 0.1s;
+}
+
+.pixel-card:hover {
+  border-color: var(--primary-neon);
+  box-shadow: 4px 4px 0px #000, 0 0 10px rgba(57, 255, 20, 0.15);
+}
+
+.pixel-card.orange {
+  border-color: var(--accent-orange-dark);
+}
+.pixel-card.orange:hover {
+  border-color: var(--accent-orange);
+  box-shadow: 4px 4px 0px #000, 0 0 10px rgba(247, 147, 26, 0.15);
+}
+
+.pixel-card.teal {
+  border-color: var(--accent-teal-dark);
+}
+.pixel-card.teal:hover {
+  border-color: var(--accent-teal);
+  box-shadow: 4px 4px 0px #000, 0 0 10px rgba(0, 245, 255, 0.15);
+}
+
+/* Pixel Buttons */
+.pixel-btn {
+  font-family: var(--font-game);
+  font-size: 0.75rem;
+  padding: 12px 18px;
+  background-color: var(--bg-swamp);
+  color: var(--text-light);
+  border: var(--border-pixel);
+  box-shadow: var(--pixel-shadow);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.05s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+}
+
+.pixel-btn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--primary-neon);
+  color: var(--primary-neon);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000;
+}
+
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000;
+}
+
+.pixel-btn.orange {
+  border-color: var(--accent-orange-dark);
+}
+.pixel-btn.orange:hover {
+  color: var(--accent-orange);
+  border-color: var(--accent-orange);
+}
+
+.pixel-btn.teal {
+  border-color: var(--accent-teal-dark);
+}
+.pixel-btn.teal:hover {
+  color: var(--accent-teal);
+  border-color: var(--accent-teal);
+}
+
+.pixel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: var(--pixel-shadow) !important;
+  border-color: var(--bg-card) !important;
+  color: var(--text-muted) !important;
+}
+
+/* Form controls */
+.pixel-input {
+  font-family: var(--font-game);
+  font-size: 0.7rem;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  border: var(--border-pixel);
+  padding: 10px;
+  outline: none;
+  width: 100%;
+}
+
+.pixel-input:focus {
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 5px rgba(57, 255, 20, 0.4);
+}
+
+.pixel-input.orange:focus {
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 5px rgba(247, 147, 26, 0.4);
+}
+
+/* Animations */
+.blink {
+  animation: blink-anim 1s infinite steps(2, start);
+}
+
+@keyframes blink-anim {
+  to { visibility: hidden; }
+}
+
+.pulse {
+  animation: pulse-anim 2s infinite ease-in-out;
+}
+
+@keyframes pulse-anim {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Sprite animations (Simulado en CSS) */
+.pixel-frog-sprite {
+  width: 32px;
+  height: 32px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+/* Estilo general del Header y contenedores */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: var(--border-pixel);
+  background-color: var(--bg-swamp);
+}
+
+/* Tablas retro */
+.pixel-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.pixel-table th {
+  font-family: var(--font-game);
+  font-size: 0.6rem;
+  background-color: var(--bg-swamp);
+  color: var(--accent-teal);
+  text-align: left;
+  padding: 10px;
+  border-bottom: var(--border-pixel);
+}
+
+.pixel-table td {
+  padding: 10px;
+  border-bottom: 2px solid var(--bg-swamp);
+  font-size: 0.85rem;
+}
+
+.pixel-table tr:hover td {
+  background-color: var(--bg-card-hover);
+  color: var(--primary-neon);
+}
