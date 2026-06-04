@@ -10,6 +10,7 @@ import { LuckyAmphoras } from './games/LuckyAmphoras';
 import { FlyCatcher } from './games/FlyCatcher';
 import { FlyFeast } from './games/FlyFeast';
 import { FrogRace } from './games/FrogRace';
+import { PondDefense } from './games/PondDefense';
 
 function App() {
   const [profile, setProfile] = useState<NostrProfile | null>(null);
@@ -142,6 +143,15 @@ function App() {
               balance={balance} 
               onBalanceChange={handleBalanceChange}
               isRealMode={isRealMode}
+            />
+          )}
+
+          {activeGame === 'pond_defense' && (
+            <PondDefense 
+              balance={balance} 
+              onBalanceChange={handleBalanceChange}
+              isRealMode={isRealMode}
+              npub={profile?.npub || null}
             />
           )}
         </section>

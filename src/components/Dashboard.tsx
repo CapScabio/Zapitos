@@ -46,6 +46,14 @@ const GAMES_LIST: GameItem[] = [
     description: 'Carrera rítmica por carriles. Presiona saltar justo en la zona verde para avanzar rápido. ¡Cruza la meta y reclama el pozo!',
     difficulty: 'Medio',
   },
+  {
+    id: 'pond_defense',
+    title: 'DEFENSA DEL ESTANQUE',
+    emoji: '🦅',
+    type: 'Individual',
+    description: '¡El estanque no se vende! Salta y aplasta las serpientes libertarias antes de que lo privaticen y lo entreguen al águila.',
+    difficulty: 'Medio',
+  },
 ];
 
 export const Dashboard: React.FC<DashboardProps> = ({ onSelectGame }) => {
