@@ -11,7 +11,7 @@
 
 ## 🎮 The Games
 
-Zapitos features 4 frog-themed mini-games—two single-player and two real-time multiplayer:
+Zapitos features 5 frog-themed mini-games—three single-player and two real-time multiplayer:
 
 ### 1. 🏺 Lucky Amphoras (*Ánforas de la Suerte*) - Single Player
 Climb a 10-row grid of amphoras. 
@@ -25,13 +25,20 @@ An interactive HTML5 Canvas arcade shooter.
 *   Eat flies to recover and win: Common Fly (`🪰` = +2 sats), Mosquito (`🦟` = +3 sats), Gold Beetle (`🪲` = +5 sats).
 *   Avoid toxic Bees (`🐝` = -5 sats). Cash out your pool at any time before running out of shots!
 
-### 3. 👥 Fly Feast (*Charco Rápido*) - Multiplayer
+### 3. 🦅 Pond Defense (*Defensa del Estanque*) - Single Player
+A satirical defense arcade game: "¡El estanque no se vende!".
+*   Pay a 10-sat entrance fee to protect your homeland. Yellow-and-black libertarian snakes crawl from the right, trying to privatize the pond and sell it to the US Eagle hovering above.
+*   Jump and stomp on the snakes to squash them (+3 sats per snake).
+*   Chain consecutive stomps in the air without landing to build a high-scoring Combo Multiplier (Combo x2, x3, etc.) for extra sat rewards!
+*   If a snake reaches the pond, the pond's health drops. If health hits 0, the Eagle swoops down, the pond is sold (Game Over), and you lose your pool. Cash out your accumulated sats at any time!
+
+### 4. 👥 Fly Feast (*Charco Rápido*) - Multiplayer
 Real-time synchronized PvP fly-catching arena.
 *   Pay a 10-sat entrance fee to join the lobby.
 *   When 2-4 players join, flies spawn across the swamp.
 *   The first player to click the fly catches it. The player with the most flies at the end of 10 rounds wins the **100% of the lobby's pool**!
 
-### 4. 🏁 Frog Race (*Carrera de Sapitos*) - Multiplayer
+### 5. 🏁 Frog Race (*Carrera de Sapitos*) - Multiplayer
 A rhythm-tapping race to the finish line.
 *   Pay the entrance fee and compete in parallel water lanes.
 *   Click the "JUMP" button (or press Space) when the oscillating indicator hits the green target zone.
@@ -86,9 +93,10 @@ A rhythm-tapping race to the finish line.
 ### Características Principales:
 1.  **🏺 Ánforas de la Suerte (Individual):** Subida de 10 filas de vasijas. Mayor dificultad a partir de la fila 6 (solo 1 de 3 es segura). Ganancia máxima de 2.0x.
 2.  **🪰 Atrapa-Moscas (Individual):** Juego en Canvas de apuntar y disparar la lengua. Cada clic descuenta 1 sat del pozo. Caza moscas para ganar sats y esquiva abejas.
-3.  **👥 Charco Rápido (Multijugador PvP):** Compite contra otros sapos por comer moscas. El ganador se lleva el 100% del pozo acumulado.
-4.  **🏁 Carrera de Sapitos (Multijugador):** Sincroniza saltos rítmicos en una barra de calibración para cruzar la meta primero.
-5.  **Billetera y Nostr:** Integración nativa con WebLN, QR de facturas Lightning y autenticación NIP-07. Incluye un **Modo Demo** y **Modo Sandbox con Bots** para pruebas rápidas sin fricciones.
+3.  **🦅 Defensa del Estanque (Individual):** ¡El estanque no se vende! Salta y aplasta las serpientes libertarias (amarillas y negras) antes de que privaticen el estanque y se lo vendan al águila de EE.UU. Cada pisada suma sats al pozo, con un multiplicador de combo si encadenas saltos en el aire sin tocar el suelo.
+4.  **👥 Charco Rápido (Multijugador PvP):** Compite contra otros sapos por comer moscas. El ganador se lleva el 100% del pozo acumulado.
+5.  **🏁 Carrera de Sapitos (Multijugador):** Sincroniza saltos rítmicos en una barra de calibración para cruzar la meta primero.
+6.  **Billetera y Nostr:** Integración nativa con WebLN, QR de facturas Lightning y autenticación NIP-07. Incluye un **Modo Demo** y **Modo Sandbox con Bots** para pruebas rápidas sin fricciones.
 
 ---
 

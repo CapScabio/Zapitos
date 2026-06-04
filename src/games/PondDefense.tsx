@@ -19,6 +19,24 @@ interface SnakeEnemy {
   stompTimer: number;
 }
 
+interface GameParticle {
+  id: number;
+  x: number;
+  y: number;
+  text: string;
+  color: string;
+  vy: number;
+  alpha: number;
+  life: number;
+}
+
+interface Cloud {
+  x: number;
+  y: number;
+  speed: number;
+  width: number;
+}
+
 const playSound = (type: 'jump' | 'stomp' | 'hurt' | 'win' | 'gameover') => {
   try {
     const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -91,6 +109,9 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
 
   // Lógica interna
   const snakesRef = useRef<SnakeEnemy[]>([]);
+  const particlesRef = useRef<GameParticle[]>([]);
+  const cloudsRef = useRef<Cloud[]>([]);
+  const comboRef = useRef<number>(1);
   const frogRef = useRef({
     x: 80,
     y: 0, // se actualiza dinámicamente según altura del canvas
@@ -140,6 +161,9 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
     setIsPlaying(true);
     
     snakesRef.current = [];
+    particlesRef.current = [];
+    cloudsRef.current = [];
+    comboRef.current = 1;
     eagleRef.current.y = -50;
     eagleRef.current.swooping = false;
     
@@ -202,12 +226,47 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
         ctx.stroke();
       }
 
-      // 2. Dibujar Estanque (Agua a la izquierda, x: 0 a 60)
-      ctx.fillStyle = 'rgba(0, 245, 255, 0.2)';
+      // 1.5. Nubes de fondo (Parallax)
+      if (cloudsRef.current.length === 0) {
+        cloudsRef.current = [
+          { x: 50, y: 50, speed: 0.08, width: 40 },
+          { x: 180, y: 80, speed: 0.12, width: 60 },
+          { x: 300, y: 35, speed: 0.05, width: 30 },
+        ];
+      }
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+      cloudsRef.current.forEach((cloud) => {
+        cloud.x -= cloud.speed;
+        if (cloud.x + cloud.width < 0) {
+          cloud.x = canvas.width;
+        }
+        ctx.fillRect(cloud.x, cloud.y, cloud.width, 8);
+        ctx.fillRect(cloud.x + 5, cloud.y - 4, cloud.width - 10, 4);
+        ctx.fillRect(cloud.x + 10, cloud.y + 8, cloud.width - 20, 3);
+      });
+
+      // 2. Dibujar Estanque (Agua a la izquierda, x: 0 a 65)
+      ctx.fillStyle = 'rgba(0, 245, 255, 0.15)';
       ctx.fillRect(0, groundY - 80, 65, 80);
       ctx.strokeStyle = 'var(--accent-teal)';
       ctx.lineWidth = 3;
       ctx.strokeRect(0, groundY - 80, 65, 80);
+
+      // Ondas del estanque
+      ctx.strokeStyle = 'rgba(0, 245, 255, 0.25)';
+      ctx.lineWidth = 1;
+      const waveShift1 = Math.sin(Date.now() / 250) * 2;
+      const waveShift2 = Math.sin(Date.now() / 250 + Math.PI) * 2;
+      
+      ctx.beginPath();
+      ctx.moveTo(2, groundY - 50 + waveShift1);
+      ctx.lineTo(63, groundY - 50 + waveShift1);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(2, groundY - 20 + waveShift2);
+      ctx.lineTo(63, groundY - 20 + waveShift2);
+      ctx.stroke();
       
       // Letrero del estanque
       ctx.font = '8px "Press Start 2P"';
@@ -215,6 +274,25 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
       ctx.textAlign = 'center';
       ctx.fillText('ESTANQUE', 32, groundY - 90);
       ctx.fillText('PATRIA', 32, groundY - 100);
+
+      // Juncos / totoras en el borde del estanque (x: 65)
+      ctx.strokeStyle = '#2d5a27';
+      ctx.lineWidth = 2;
+      // Junco 1
+      ctx.beginPath();
+      ctx.moveTo(64, groundY);
+      ctx.quadraticCurveTo(61, groundY - 12, 63, groundY - 24);
+      ctx.stroke();
+      ctx.fillStyle = '#5c4033'; // Flor marrón
+      ctx.fillRect(61, groundY - 28, 4, 6);
+
+      // Junco 2
+      ctx.beginPath();
+      ctx.moveTo(67, groundY);
+      ctx.quadraticCurveTo(71, groundY - 8, 69, groundY - 16);
+      ctx.stroke();
+      ctx.fillStyle = '#5c4033'; // Flor marrón
+      ctx.fillRect(67, groundY - 19, 4, 4);
 
       // 3. Suelo
       ctx.fillStyle = '#14241d';
@@ -252,19 +330,22 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
       }
 
       if (eagleRef.current.swooping) {
-        // Águila se desplaza hacia abajo a capturar el letrero
         if (eagleRef.current.y < groundY - 60) {
           eagleRef.current.y += eagleRef.current.speed * 2.5;
         }
       } else {
-        // Águila oscila flotando arriba
-        eagleRef.current.y = 40 + Math.sin(Date.now() / 200) * 5;
+        eagleRef.current.y = 45 + Math.sin(Date.now() / 250) * 4;
       }
       
+      ctx.save();
+      ctx.translate(eagleRef.current.x, eagleRef.current.y);
+      const eagleTilt = eagleRef.current.swooping ? 0.2 : Math.sin(Date.now() / 300) * 0.12;
+      ctx.rotate(eagleTilt);
       ctx.font = '32px Arial';
-      ctx.fillText(eagleRef.current.emoji, eagleRef.current.x, eagleRef.current.y);
+      ctx.textAlign = 'center';
+      ctx.fillText(eagleRef.current.emoji, 0, 0);
+      ctx.restore();
 
-      // Mostrar cartel "VENDIDO" si el águila se lleva el estanque
       if (eagleRef.current.swooping && eagleRef.current.y >= groundY - 70) {
         ctx.fillStyle = 'var(--text-error)';
         ctx.font = '10px "Press Start 2P"';
@@ -311,7 +392,6 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
         snake.x -= snake.speed;
         snake.wiggleAngle += 0.25;
 
-        // Bounding box para depuración / dibujo
         const snakeWidth = snake.width;
         const snakeHeight = snake.height;
 
@@ -319,10 +399,8 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
         ctx.save();
         ctx.translate(snake.x, snake.y);
         
-        // Efecto ondulatorio
         const wiggleY = Math.sin(snake.wiggleAngle) * 3;
         
-        // Cuerpo de la serpiente (rayas segmentadas)
         const segments = 4;
         const segWidth = snakeWidth / segments;
         for (let i = 0; i < segments; i++) {
@@ -337,6 +415,16 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
         ctx.fillRect(-snakeWidth / 2 - 7, -snakeHeight / 2 + 2 + wiggleY, 3, 2);
 
         ctx.restore();
+
+        // Dibujar indicador de advertencia si la serpiente está fuera de pantalla
+        if (snake.x > canvas.width - 25 && !snake.isStomped) {
+          ctx.font = '8px "Press Start 2P"';
+          ctx.fillStyle = 'var(--text-error)';
+          if (Math.floor(Date.now() / 150) % 2 === 0) {
+            ctx.textAlign = 'center';
+            ctx.fillText('⚠', canvas.width - 15, snake.y);
+          }
+        }
 
         // Si la serpiente entra al estanque (extremo izquierdo)
         if (snake.x <= 75) {
@@ -369,6 +457,7 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
             frog.y = groundY - frog.height;
             frog.vy = 0;
             frog.isJumping = false;
+            comboRef.current = 1; // Resetea combo al tocar tierra
           }
 
           // Detectar pisada (Stomp) mientras cae
@@ -376,18 +465,49 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
             snakesRef.current.forEach((snake) => {
               if (snake.isStomped) return;
 
-              // Calcular distancias de colisión
               const distY = Math.abs((frog.y + frog.height / 2) - snake.y);
               const distX = Math.abs(frog.x - snake.x);
 
               if (distX < 24 && distY < 20) {
                 // ¡PISÓ LA SERPIENTE!
                 snake.isStomped = true;
-                setActivePool(prev => prev + 3); // +3 sats por serpiente
+                
+                const currentCombo = comboRef.current;
+                const reward = 3 * currentCombo;
+                setActivePool(prev => prev + reward);
                 playSound('stomp');
+
+                // Partícula de texto "+X SATS"
+                particlesRef.current.push({
+                  id: Date.now() + Math.random(),
+                  x: snake.x,
+                  y: snake.y - 10,
+                  text: `+${reward} SATS`,
+                  color: currentCombo > 1 ? '#f7931a' : '#39ff14', // Naranja Bitcoin para combo, verde para normal
+                  vy: -1.0,
+                  alpha: 1,
+                  life: 40
+                });
+
+                // Si hay combo, mostrar el cartel de combo
+                if (currentCombo > 1) {
+                  particlesRef.current.push({
+                    id: Date.now() + Math.random(),
+                    x: snake.x,
+                    y: snake.y - 22,
+                    text: `COMBO x${currentCombo}!`,
+                    color: '#00f5ff', // Cian
+                    vy: -1.4,
+                    alpha: 1,
+                    life: 45
+                  });
+                }
                 
                 // Efecto de rebote del sapo
-                frog.vy = -6; // Salta hacia arriba nuevamente
+                frog.vy = -6.5; // Salta hacia arriba nuevamente
+                
+                // Incrementar combo
+                comboRef.current += 1;
               }
             });
           }
@@ -397,6 +517,25 @@ export const PondDefense: React.FC<PondDefenseProps> = ({
       // Dibujar sapito
       ctx.font = '30px Arial';
       ctx.fillText('🐸', frog.x, frog.y + 12); // Ajuste vertical
+
+      // 9. Actualizar y dibujar Partículas
+      particlesRef.current.forEach((p, index) => {
+        p.y += p.vy;
+        p.life--;
+        p.alpha = Math.max(0, p.life / 40);
+        
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.font = '8px "Press Start 2P"';
+        ctx.fillStyle = p.color;
+        ctx.textAlign = 'center';
+        ctx.fillText(p.text, p.x, p.y);
+        ctx.restore();
+
+        if (p.life <= 0) {
+          particlesRef.current.splice(index, 1);
+        }
+      });
 
       animationId = requestAnimationFrame(gameLoop);
     };
