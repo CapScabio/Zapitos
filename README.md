@@ -2,8 +2,11 @@
 
 [![Hackathon](https://img.shields.io/badge/La_Crypta-Gaming_Hackathon_%2304-brightgreen?style=press-start-2p&logo=bitcoin)](https://lacrypta.dev/hackathons/zaps)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Live Demo](https://img.shields.io/badge/Demo-Vercel-orange?style=flat&logo=vercel)](https://zapitos.vercel.app/)
 
-**Zapitos Arcade** is an 8-bit retro-styled gaming platform where players can bet and win Satoshis (Bitcoin via Lightning Network) and log in using their Nostr identity. Built as a entry for **La Crypta Dev's Hackatón #04 (GAMING)** in June 2026.
+**Zapitos Arcade** is an 8-bit retro-styled gaming platform where players can bet and win Satoshis (Bitcoin via Lightning Network) and log in using their Nostr identity. Built as an entry for **La Crypta Dev's Hackatón #04 (GAMING)** in June 2026.
+
+🎮 **Play the live demo now:** [zapitos.vercel.app](https://zapitos.vercel.app/)
 
 [Español abajo 🇪🇸](#español)
 
@@ -89,6 +92,8 @@ A rhythm-tapping race to the finish line.
 ## 🇪🇸 Descripción en Español
 
 **Zapitos Arcade** es una plataforma de minijuegos web con estética retro de **8-bits** donde los jugadores apuestan y ganan Satoshis (Bitcoin a través de Lightning Network) e inician sesión de manera descentralizada con su identidad de Nostr. Proyecto desarrollado para la **Hackatón #04 (GAMING)** de La Crypta Dev (Junio 2026).
+
+🎮 **Prueba la demo en vivo aquí:** [zapitos.vercel.app](https://zapitos.vercel.app/)
 
 ### Características Principales:
 1.  **🏺 Ánforas de la Suerte (Individual):** Subida de 10 filas de vasijas. Mayor dificultad a partir de la fila 6 (solo 1 de 3 es segura). Ganancia máxima de 2.0x.
