@@ -11,6 +11,10 @@ import { FlyCatcher } from './games/FlyCatcher';
 import { FlyFeast } from './games/FlyFeast';
 import { FrogRace } from './games/FrogRace';
 import { PondDefense } from './games/PondDefense';
+import { SapoRun } from './games/SapoRun';
+import { SapoStack } from './games/SapoStack';
+import { SapoMiner } from './games/SapoMiner';
+import { SwampInvaders } from './games/SwampInvaders';
 
 function App() {
   const [profile, setProfile] = useState<NostrProfile | null>(null);
@@ -148,6 +152,42 @@ function App() {
 
           {activeGame === 'pond_defense' && (
             <PondDefense 
+              balance={balance} 
+              onBalanceChange={handleBalanceChange}
+              isRealMode={isRealMode}
+              npub={profile?.npub || null}
+            />
+          )}
+
+          {activeGame === 'sapo_run' && (
+            <SapoRun 
+              balance={balance} 
+              onBalanceChange={handleBalanceChange}
+              isRealMode={isRealMode}
+              npub={profile?.npub || null}
+            />
+          )}
+
+          {activeGame === 'sapo_stack' && (
+            <SapoStack 
+              balance={balance} 
+              onBalanceChange={handleBalanceChange}
+              isRealMode={isRealMode}
+              npub={profile?.npub || null}
+            />
+          )}
+
+          {activeGame === 'sapo_miner' && (
+            <SapoMiner 
+              balance={balance} 
+              onBalanceChange={handleBalanceChange}
+              isRealMode={isRealMode}
+              npub={profile?.npub || null}
+            />
+          )}
+
+          {activeGame === 'swamp_invaders' && (
+            <SwampInvaders 
               balance={balance} 
               onBalanceChange={handleBalanceChange}
               isRealMode={isRealMode}
