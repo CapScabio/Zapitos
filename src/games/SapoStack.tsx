@@ -234,7 +234,7 @@ export const SapoStack: React.FC<SapoStackProps> = ({
     // Ajustar y de los bloques apilados para emular la cámara que sube
     if (nextRow > 4) {
       blocks.forEach((b, idx) => {
-        b.y = 340 - (nextRow - idx) * 24;
+        b.y = 244 + (nextRow - idx) * 24;
       });
     }
   };
@@ -392,7 +392,7 @@ export const SapoStack: React.FC<SapoStackProps> = ({
               </button>
               <button
                 onClick={handleCashOut}
-                className="pixel-btn teal blink"
+                className="pixel-btn teal"
                 style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
                 disabled={currentRow === 0}
               >

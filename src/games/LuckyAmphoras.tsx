@@ -254,7 +254,7 @@ export const LuckyAmphoras: React.FC<LuckyAmphorasProps> = ({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <button
                 onClick={handleCashOut}
-                className="pixel-btn teal blink"
+                className="pixel-btn teal"
                 style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
                 disabled={currentRow <= 1}
               >

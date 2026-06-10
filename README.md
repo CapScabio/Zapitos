@@ -4,104 +4,118 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Live Demo](https://img.shields.io/badge/Demo-Vercel-orange?style=flat&logo=vercel)](https://zapitos.vercel.app/)
 
-**Zapitos Arcade** is an 8-bit retro-styled gaming platform where players can bet and win Satoshis (Bitcoin via Lightning Network) and log in using their Nostr identity. Built as an entry for **La Crypta Dev's Hackatón #04 (GAMING)** in June 2026.
+**Zapitos Arcade** es una plataforma web y móvil (PWA) de minijuegos retro de 8-bits donde los jugadores apuestan y ganan Satoshis (Bitcoin a través de Lightning Network) e inician sesión de manera descentralizada con su identidad de Nostr. Proyecto desarrollado para la **Hackatón #04 (GAMING)** de La Crypta Dev (Junio 2026).
 
-🎮 **Play the live demo now:** [zapitos.vercel.app](https://zapitos.vercel.app/)
-
-[Español abajo 🇪🇸](#español)
+🎮 **Juega la demo en vivo ahora:** [zapitos.vercel.app](https://zapitos.vercel.app/)
 
 ---
 
-## 🎮 The Games
+## 🎮 El Catálogo de Minijuegos
 
-Zapitos features 5 frog-themed mini-games—three single-player and two real-time multiplayer:
+La plataforma cuenta con 9 juegos temáticos de sapitos en total: 7 juegos individuales (Single Player) de riesgo calibrado y cobro en caliente, y 2 juegos multijugador (PvP) sincronizados en tiempo real.
 
-### 1. 🏺 Lucky Amphoras (*Ánforas de la Suerte*) - Single Player
-Climb a 10-row grid of amphoras. 
-*   **Rows 1-5:** 2 safe paths, 1 trap (66.6% success rate).
-*   **Rows 6-10:** The odds flip! 1 safe path, 2 traps (33.3% success rate).
-*   Risk your stake to reach the top. Maximum payout is capped at **2.0x** (double your bet) at Row 10 to ensure a balanced game economy. Cash out at any row!
+### 🕹️ Juegos Individuales (Single Player)
 
-### 2. 🪰 Fly Catcher (*Atrapa-Moscas*) - Single Player
-An interactive HTML5 Canvas arcade shooter.
-*   Every tap shoots the frog's tongue at insects and costs **1 sat** from your active pool.
-*   Eat flies to recover and win: Common Fly (`🪰` = +2 sats), Mosquito (`🦟` = +3 sats), Gold Beetle (`🪲` = +5 sats).
-*   Avoid toxic Bees (`🐝` = -5 sats). Cash out your pool at any time before running out of shots!
+#### 1. 🏺 Ánforas de la Suerte (*Lucky Amphoras*)
+Sube un camino de 10 filas de vasijas de barro (3 vasijas por fila).
+*   **Filas 1-5:** 2 vasijas seguras y 1 trampa (66.6% de éxito).
+*   **Filas 6-10:** ¡Dificultad invertida! 1 vasija segura y 2 trampas (33.3% de éxito).
+*   **Wagers:** Apuestas tu pozo para llegar a la cima. La recompensa máxima en la fila 10 está capada a **2.0x** de tu apuesta para proteger la economía. ¡Puedes hacer *Cash Out* (Cobrar) tras cualquier fila exitosa!
 
-### 3. 🦅 Pond Defense (*Defensa del Estanque*) - Single Player
-A satirical defense arcade game: "¡El estanque no se vende!".
-*   Pay a 10-sat entrance fee to protect your homeland. Yellow-and-black libertarian snakes crawl from the right, trying to privatize the pond and sell it to the US Eagle hovering above.
-*   Jump and stomp on the snakes to squash them (+3 sats per snake).
-*   Chain consecutive stomps in the air without landing to build a high-scoring Combo Multiplier (Combo x2, x3, etc.) for extra sat rewards!
-*   If a snake reaches the pond, the pond's health drops. If health hits 0, the Eagle swoops down, the pond is sold (Game Over), and you lose your pool. Cash out your accumulated sats at any time!
+#### 2. 🪰 Atrapa-Moscas (*Fly Catcher*)
+Un arcade dinámico en Canvas de apuntar y disparar con la lengua del sapito.
+*   Pagas una entrada para ingresar al charco. Cada lengüetazo disparado cuesta **1 sat** de tu pozo activo.
+*   Caza insectos para recuperar y ganar sats: Mosca Común (`🪰` = +2 sats), Mosquito (`🦟` = +3 sats) y Escarabajo Dorado (`🪲` = +5 sats).
+*   Esquiva a las Abejas venenosas (`🐝` = -5 sats). ¡Cobra tu pozo en caliente en cualquier momento!
 
-### 4. 👥 Fly Feast (*Charco Rápido*) - Multiplayer
-Real-time synchronized PvP fly-catching arena.
-*   Pay a 10-sat entrance fee to join the lobby.
-*   When 2-4 players join, flies spawn across the swamp.
-*   The first player to click the fly catches it. The player with the most flies at the end of 10 rounds wins the **100% of the lobby's pool**!
+#### 3. 🦅 Defensa del Estanque (*Pond Defense*)
+Juego de defensa satírico: *¡El estanque patrio no se vende!*
+*   Serpientes libertarias amarillas con rayas negras avanzan desde la derecha intentando privatizar el estanque y vendérselo al Águila de EE.UU. que acecha arriba.
+*   Haz saltar al sapo para pisar las serpientes (+3 sats al pozo).
+*   **Multiplicador de Combo Aéreo:** Si encadenas pisadas sobre enemigos en el aire sin tocar el suelo, incrementas un combo (`Combo x2`, `x3`, etc.) multiplicando tus ganancias. Al tocar tierra, se reinicia.
+*   Si una serpiente entra al estanque, daña su barra de vida. Si llega a 0, el águila privatiza el estanque (¡VENDIDO! EE.UU. 🇺🇸) y pierdes tu pozo.
 
-### 5. 🏁 Frog Race (*Carrera de Sapitos*) - Multiplayer
-A rhythm-tapping race to the finish line.
-*   Pay the entrance fee and compete in parallel water lanes.
-*   Click the "JUMP" button (or press Space) when the oscillating indicator hits the green target zone.
-*   Your progress is synchronized in real-time. The first frog to cross the finish line wins the entire pool.
+#### 4. 🏃‍♂️ Sapo Run
+Juego de carrera infinito de scroll lateral en Canvas estilo *Chrome Dino*.
+*   El sapito corre automáticamente sobre nenúfares flotantes en el pantano.
+*   Toca la pantalla o presiona Espacio para saltar. Cuenta con **Doble Salto** (puedes pulsar una segunda vez en el aire para superar abismos imposibles).
+*   Caza moscas (`🪰` = +1 sat) y escarabajos (`🪲` = +3 sats) en el trayecto.
+*   Si chocas contra cangrejos/culebras o caes al agua profunda, es Game Over. Cobra tus sats acumulados cuando decidas no arriesgar más.
 
-> [!NOTE]
-> **Offline Bot Sandbox:** If the WebSocket server is down or you are playing on a serverless deploy (e.g. Vercel) without a dedicated backend, both multiplayer games will automatically enable an **AI Bot mode**. Simulated AI frogs will join the lobby, allowing judges and players to test the game loops instantly.
+#### 5. 🧱 Sapo Stack
+Juego de habilidad y reflejos de apilamiento vertical en Canvas (estilo *Stacker* de arcade).
+*   Plataformas flotantes de nenúfares oscilan de lado a lado y debes detenerlas a tiempo para construir una torre estable sobre la base.
+*   Cada piso colocado con precisión incrementa tu multiplicador exponencialmente (`x1.15`, `x1.35`, `x1.60`, `x1.95` hasta un máximo de **8.0x** en el piso 10).
+*   Si detienes el bloque desalineado, se recortarán los bordes reduciendo su tamaño. Si le erras por completo, la torre cae y pierdes. Cobra tus sats acumulados en cualquier piso.
+
+#### 6. ⛏️ Sapo Miner
+Excavación estratégica en una grilla de barro de 5x5 inspirada en *Buscaminas* y *Mines*.
+*   El pantano esconde tesoros: hay exactamente **1 culebra (🐍) por fila** (5 culebras ocultas en total) y 20 lombrices deliciosas (🪱).
+*   **Modo Marcador (🚩):** Puedes alternar entre el modo *Excavar ⛏️* y *Marcar 🚩*.
+*   Para completar el juego y coronar la victoria total con un pago masivo de **270.0x**, debes desenterrar las 20 lombrices y marcar correctamente la posición de las 5 culebras con banderas. Si desentierras una culebra directamente, pierdes el pozo. Cobra tus sats acumulados en cualquier turno.
+
+#### 7. 🛸 Swamp Invaders
+Shooter retro de scroll vertical en pantalla extendida de 480px de alto.
+*   Insectos robóticos invasores descienden en hileras balanceándose de lado a lado.
+*   Te desplazas horizontalmente y disparas la lengua del sapito hacia arriba. Cada disparo cuesta **1 sat** de tu pozo.
+*   Destruye a los invasores para sumar sats a tu pozo: Drones (`🤖` = +2 sats), Avispas acorazadas (`🐝` = +4 sats, requieren 2 golpes) y el OVNI Jefe (`🛸` = +15 sats, requiere 3 golpes).
+*   Evita que los invasores toquen el suelo o que el pozo llegue a 0. Cobra tu botín acumulado cuando quieras.
 
 ---
 
-## ⚡ Tech Stack & Features
+### 👥 Juegos Multijugador (Real-Time PvP)
 
-*   **Frontend:** React 19, Vite, TypeScript, Canvas API.
-*   **Styling:** Custom 8-bit visual styles in CSS Vanilla (no Tailwind) with CRT scanline filters, retro gaming fonts (`Press Start 2P`), and glassmorphism cards.
-*   **Backend:** Node.js, Express, Socket.io (real-time state synchronization).
-*   **Bitcoin Integration:**
-    *   **WebLN** support (automatic deposits/withdrawals with 1-click using Alby/LaWallet extension).
-    *   Dynamic Lightning Invoice QR rendering & status polling.
-    *   Mock Lightning Server: Automatically processes simulated payments in Demo Mode in 4 seconds for sandbox testing.
-*   **Nostr Identity:** NIP-07 extension login to fetch your name, avatar, and npub, with manual fallback profile configuration.
-*   **Audio:** Custom 8-bit sound effects (bleeps, coin collect, explosion noises) generated dynamically in-browser via the **Web Audio API** (no heavy sound assets).
+#### 8. 👥 Charco Rápido (*Fly Feast*)
+Competición sincronizada por WebSockets en tiempo real.
+*   Los sapos entran a una misma sala pagando una entrada de 10 sats.
+*   Las moscas aparecen de forma aleatoria en el charco y el jugador que haga clic más rápido se la come.
+*   El sapito que atrape más moscas al cabo de 10 rondas se corona ganador y se lleva el **100% del pozo acumulado** de todas las entradas.
+*   *Modo Sandbox:* Si juegas de forma local o sin servidor activo, se activa el modo contra bots con IA automática.
+
+#### 9. 🏁 Carrera de Sapitos (*Frog Race*)
+Carrera de velocidad y ritmo por carriles de agua sincronizada por WebSockets.
+*   Paga tu entrada y compite en tiempo real contra otros jugadores.
+*   Presiona saltar (o Espacio) justo en el momento en que la aguja oscilante pase por la zona verde de calibración para avanzar rápido.
+*   El primer sapito en cruzar la meta reclama el pozo completo. Cuenta con soporte offline de bots con IA para pruebas.
 
 ---
 
-## 🚀 Quickstart
+## ⚡ Integración de Bitcoin (Lightning Network) y Nostr
 
-1.  **Clone the repository:**
+*   **WebLN Integrado:** Conexión nativa con extensiones de navegador (Alby, LaWallet, etc.) para depósitos y retiros en 1 solo clic.
+*   **Facturas QR Dinámicas:** Si no posees extensión, genera códigos QR de facturas Lightning con consulta de estado en tiempo real.
+*   **Nostr Identity (NIP-07):** Inicia sesión con tu extensión Nostr para cargar tu nombre, avatar y npub. Si eres un jurado o no tienes extensión, puedes usar el **Modo Sapo Manual** para crear un perfil de prueba al instante.
+*   **Modo Demo:** Juega sin arriesgar fondos reales cargando sats virtuales gratis con un solo clic.
+
+---
+
+## 📱 PWA (Progressive Web App) y Soporte Móvil
+
+Zapitos Arcade está completamente optimizado para su instalación en celulares Android:
+*   Se añade soporte PWA a través de `vite-plugin-pwa`.
+*   Al abrir el enlace en Chrome para Android, aparecerá el banner de instalación.
+*   Se ejecuta a pantalla completa en modo `standalone` con orientación fija `portrait`, ocultando la barra del navegador para emular una aplicación nativa.
+*   Todos los juegos incluyen botones y controles táctiles adaptados para jugar cómodamente en smartphones.
+
+---
+
+## 🚀 Instalación Local
+
+1.  **Clonar repositorio:**
     ```bash
     git clone https://github.com/CapScabio/Zapitos.git
     cd Zapitos
     ```
-2.  **Install dependencies:**
+2.  **Instalar dependencias:**
     ```bash
     npm install
     ```
-3.  **Run Client and Server concurrently in Development:**
+3.  **Ejecutar cliente y servidor de WebSocket simultáneamente:**
     ```bash
     npm run dev:all
     ```
-    This launches:
-    *   The frontend Vite application at `http://localhost:5173`
-    *   The Socket.io backend server at `http://localhost:3001`
-
----
-
-<a name="español"></a>
-
-## 🇪🇸 Descripción en Español
-
-**Zapitos Arcade** es una plataforma de minijuegos web con estética retro de **8-bits** donde los jugadores apuestan y ganan Satoshis (Bitcoin a través de Lightning Network) e inician sesión de manera descentralizada con su identidad de Nostr. Proyecto desarrollado para la **Hackatón #04 (GAMING)** de La Crypta Dev (Junio 2026).
-
-🎮 **Prueba la demo en vivo aquí:** [zapitos.vercel.app](https://zapitos.vercel.app/)
-
-### Características Principales:
-1.  **🏺 Ánforas de la Suerte (Individual):** Subida de 10 filas de vasijas. Mayor dificultad a partir de la fila 6 (solo 1 de 3 es segura). Ganancia máxima de 2.0x.
-2.  **🪰 Atrapa-Moscas (Individual):** Juego en Canvas de apuntar y disparar la lengua. Cada clic descuenta 1 sat del pozo. Caza moscas para ganar sats y esquiva abejas.
-3.  **🦅 Defensa del Estanque (Individual):** ¡El estanque no se vende! Salta y aplasta las serpientes libertarias (amarillas y negras) antes de que privaticen el estanque y se lo vendan al águila de EE.UU. Cada pisada suma sats al pozo, con un multiplicador de combo si encadenas saltos en el aire sin tocar el suelo.
-4.  **👥 Charco Rápido (Multijugador PvP):** Compite contra otros sapos por comer moscas. El ganador se lleva el 100% del pozo acumulado.
-5.  **🏁 Carrera de Sapitos (Multijugador):** Sincroniza saltos rítmicos en una barra de calibración para cruzar la meta primero.
-6.  **Billetera y Nostr:** Integración nativa con WebLN, QR de facturas Lightning y autenticación NIP-07. Incluye un **Modo Demo** y **Modo Sandbox con Bots** para pruebas rápidas sin fricciones.
+    *   Cliente: `http://localhost:5173`
+    *   Servidor WebSocket: `http://localhost:3001`
 
 ---
 
@@ -111,6 +125,6 @@ Creado por el **Capitán del Scabio**, ¡salud y libertad! 🍻⚡
 
 ---
 
-## 📜 License
+## 📜 Licencia
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.

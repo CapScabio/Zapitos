@@ -95,15 +95,16 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
   const [gameState, setGameState] = useState<'idle' | 'playing' | 'gameover'>('idle');
 
   // Lógica de juego con refs
-  const frogXRef = useRef<number>(170); // Posición horizontal del sapo
+  const frogXRef = useRef<number>(150); // Posición horizontal del sapo
   const bulletsRef = useRef<Bullet[]>([]);
   const invadersRef = useRef<Invader[]>([]);
   
   const invaderDirRef = useRef<number>(1); // 1 = derecha, -1 = izquierda
-  const invaderSpeedRef = useRef<number>(0.8);
+  const invaderSpeedRef = useRef<number>(0.5); // Reducido de 0.8 a 0.5 para dar más tiempo
   const moveStateRef = useRef<'idle' | 'left' | 'right'>('idle');
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+  const groundY = 450; // Línea de tierra en canvas de 480 de altura
 
   const updateBackendBalance = async (amount: number) => {
     if (isRealMode && npub) {
@@ -134,9 +135,9 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
     frogXRef.current = 155; // Centrado en el canvas de 340
     bulletsRef.current = [];
     invaderDirRef.current = 1;
-    invaderSpeedRef.current = 0.8;
+    invaderSpeedRef.current = 0.5; // Velocidad base más lenta
     
-    // Generar cuadrícula inicial de invasores (3 filas x 6 columnas)
+    // Generar cuadrícula inicial de invasores (3 filas x 5 columnas)
     const initialInvaders: Invader[] = [];
     const rows = 3;
     const cols = 5;
@@ -197,8 +198,8 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
     bulletsRef.current.push({
       id: Date.now() + Math.random(),
       x: frogXRef.current + 15, // Centrado sobre el sapito
-      y: 330,
-      vy: -6, // Velocidad hacia arriba
+      y: groundY - 20, // y = 430
+      vy: -6,
     });
 
     playSound('shoot');
@@ -238,7 +239,6 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
       }
 
       // Suelo
-      const groundY = 350;
       ctx.fillStyle = '#14241d';
       ctx.fillRect(0, groundY, canvas.width, 30);
       ctx.strokeStyle = '#39ff14';
@@ -272,7 +272,7 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
       if (hitEdge) {
         invaderDirRef.current = -invaderDirRef.current;
         invadersRef.current.forEach((inv) => {
-          inv.y += 15;
+          inv.y += 18;
           // Si llega a la altura del sapo
           if (inv.y >= groundY - 20) {
             setGameState('gameover');
@@ -280,15 +280,15 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
             playSound('gameover');
           }
         });
-        invaderSpeedRef.current = Math.min(2.5, invaderSpeedRef.current + 0.05); // Acelerar
+        invaderSpeedRef.current = Math.min(2.5, invaderSpeedRef.current + 0.04); // Acelerar más suavemente
       }
 
       // Spawning de Boss esporádico
-      if (spawnTimer % 600 === 0 && !invadersRef.current.some(inv => inv.type === 'boss')) {
+      if (spawnTimer % 700 === 0 && !invadersRef.current.some(inv => inv.type === 'boss')) {
         invadersRef.current.push({
           id: Date.now(),
           x: -30,
-          y: 30,
+          y: 40,
           type: 'boss',
           emoji: '🛸',
           width: 24,
@@ -300,9 +300,8 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
 
       // Dibujar Invasores
       invadersRef.current.forEach((inv, idx) => {
-        // Si es el Boss, moverlo hacia la derecha a velocidad constante
         if (inv.type === 'boss') {
-          inv.x += 1.5;
+          inv.x += 1.2;
           if (inv.x > canvas.width + 30) {
             invadersRef.current.splice(idx, 1);
             return;
@@ -313,7 +312,7 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
         ctx.textAlign = 'center';
         ctx.fillText(inv.emoji, inv.x + 10, inv.y + 10);
 
-        // Barra de vida pequeña para wasp y boss
+        // Barra de vida para wasp y boss
         if (inv.hp > 1) {
           ctx.fillStyle = '#ff0000';
           ctx.fillRect(inv.x, inv.y - 6, 20, 3);
@@ -327,7 +326,6 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
       bulletsRef.current.forEach((bullet, bIdx) => {
         bullet.y += bullet.vy;
         
-        // Dibujar lengua (línea rosa gruesa con punta roja)
         ctx.strokeStyle = '#ff69b4';
         ctx.lineWidth = 4;
         ctx.lineCap = 'round';
@@ -347,12 +345,10 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
           const distY = Math.abs(bullet.y - (inv.y + 10));
 
           if (distX < 15 && distY < 15) {
-            // ¡Impacto!
             inv.hp -= 1;
-            bulletsRef.current.splice(bIdx, 1); // Remover bala
+            bulletsRef.current.splice(bIdx, 1);
             
             if (inv.hp <= 0) {
-              // Destruido
               setActivePool(prev => prev + inv.points);
               invadersRef.current.splice(iIdx, 1);
               playSound('kill');
@@ -362,17 +358,15 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
           }
         });
 
-        // Remover si sale de la pantalla superior
         if (bullet.y < 0) {
           bulletsRef.current.splice(bIdx, 1);
         }
       });
 
-      // Si se destruyen todos los invasores base, re-spawning
+      // Si se destruyen todos los invasores, re-spawning
       const normalInvaders = invadersRef.current.filter(inv => inv.type !== 'boss');
       if (normalInvaders.length === 0) {
-        // Generar oleada más rápida
-        const nextSpeed = invaderSpeedRef.current + 0.2;
+        const nextSpeed = invaderSpeedRef.current + 0.15;
         const initialInvaders: Invader[] = [];
         const rows = 3;
         const cols = 5;
@@ -439,8 +433,8 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
       <div className="pixel-card" style={{ width: '100%', textAlign: 'center' }}>
         <h2 className="retro-title" style={{ fontSize: '1.05rem', marginBottom: '8px' }}>🛸 SWAMP INVADERS</h2>
         <p className="retro-text" style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>
-          Mueve el sapito con los botones o flechas del teclado. Haz clic en el canvas para disparar.
-          Cada disparo cuesta 1 sat. 🤖=+2, 🐝=+4, 🛸=+15.
+          Muévete con los botones o A/D. Haz clic en el canvas para disparar.
+          Pantalla extendida y velocidad calibrada. 🤖=+2, 🐝=+4, 🛸=+15.
         </p>
       </div>
 
@@ -481,7 +475,6 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
             </button>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {/* Botón de disparo en controles */}
               <button
                 onClick={handleShoot}
                 className="pixel-btn orange"
@@ -490,7 +483,6 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
                 🔥 DISPARAR (-1 sat)
               </button>
               
-              {/* Botones de movimiento táctiles/mobile */}
               <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
                 <button
                   onMouseDown={() => moveStateRef.current = 'left'}
@@ -516,7 +508,7 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
 
               <button
                 onClick={handleCashOut}
-                className="pixel-btn teal blink"
+                className="pixel-btn teal"
                 style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
                 disabled={activePool <= 0}
               >
@@ -539,21 +531,21 @@ export const SwampInvaders: React.FC<SwampInvadersProps> = ({
             <canvas
               ref={canvasRef}
               width={340}
-              height={380}
+              height={480}
               onClick={handleShoot}
               style={{ 
                 display: 'block', 
                 cursor: 'crosshair',
                 width: '100%',
                 maxWidth: '340px',
-                height: '380px'
+                height: '480px'
               }}
             />
           ) : (
-            <div style={{ width: '340px', height: '380px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', background: 'var(--bg-swamp)', padding: '20px' }}>
-              <div style={{ fontSize: '3rem' }}>👽 👾 🐸</div>
+            <div style={{ width: '340px', height: '480px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', background: 'var(--bg-swamp)', padding: '20px' }}>
+              <div style={{ fontSize: '3rem' }}>🛸 👾 🐸</div>
               <div className="retro-text" style={{ color: 'var(--text-muted)', fontSize: '0.6rem', textAlign: 'center', lineHeight: '1.6' }}>
-                Defiende el pantano contra la invasión cibernética. Muévete y dispara tu lengua para derribar a los invasores.
+                Defiende el pantano contra la invasión. Muévete y dispara tu lengua para derribar a los invasores.
               </div>
             </div>
           )}

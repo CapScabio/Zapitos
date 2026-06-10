@@ -109,6 +109,7 @@ export const SapoRun: React.FC<SapoRunProps> = ({
     isJumping: false,
     width: 30,
     height: 30,
+    jumpCount: 0,
   });
 
   const platformsRef = useRef<Platform[]>([]);
@@ -339,6 +340,7 @@ export const SapoRun: React.FC<SapoRunProps> = ({
           frog.y = plat.y - frog.height;
           frog.vy = 0;
           frog.isJumping = false;
+          frog.jumpCount = 0;
         }
       });
 
@@ -366,9 +368,10 @@ export const SapoRun: React.FC<SapoRunProps> = ({
 
   const handleJump = () => {
     const frog = frogRef.current;
-    if (!frog.isJumping) {
+    if (frog.jumpCount < 2) {
       frog.isJumping = true;
       frog.vy = -7.5; // Fuerza salto
+      frog.jumpCount += 1;
       playSound('jump');
     }
   };
@@ -438,7 +441,7 @@ export const SapoRun: React.FC<SapoRunProps> = ({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <button
                 onClick={handleCashOut}
-                className="pixel-btn teal blink"
+                className="pixel-btn teal"
                 style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
                 disabled={activePool <= 0}
               >
